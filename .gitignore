@@ -1,2 +1,2 @@
-vendor 
-composer.lock 
+backend/usuarios_ms/vendor
+backend/usuarios_ms/composer.lock

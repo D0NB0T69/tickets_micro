@@ -18,7 +18,8 @@ class UsuariosRepository{
             return $response->withStatus(204);
         }
         //me va escribir la consulta
-        return $response->getBody()->write($data);
+        $response->getBody()->write($data);
+        return $response->withHeader('Content-Type', 'application/json');
 
     }
 }
