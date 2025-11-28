@@ -3,3 +3,4 @@ GET http://127.0.0.1:8000
 
 ### Consultar Usuarios 
 GET http://127.0.0.1:8000/usuarios/all
+Content-Type: application/json

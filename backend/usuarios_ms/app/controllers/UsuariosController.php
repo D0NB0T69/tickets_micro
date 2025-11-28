@@ -1,5 +1,6 @@
 <?php
 namespace App\controllers;
+use Exception;
 
 use App\models\Usuario;
 
@@ -15,5 +16,16 @@ class UsuariosController{
             return null;
         }
         return $rows->toJson(); 
+    }
+
+    public function login($username, $password)
+    {
+        $row = Usuario::where('userName', $username)
+            ->where('password', $password)
+            ->first();
+        if (empty($row)) {
+            throw new Exception("User null", 1);
+        }
+        return $row->toJson();
     }
 }
