@@ -1,2 +1,4 @@
 backend/usuarios_ms/vendor
 backend/usuarios_ms/composer.lock
+backend/tickets_ms/vendor
+backend/tickets_ms/composer.lock

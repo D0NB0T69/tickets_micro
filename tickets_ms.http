@@ -1,0 +1,60 @@
+### Prueba del Microservicio de Tickets
+GET http://127.0.0.1:8001
+Content-Type: application/json
+
+### Listar Todos los Tickets
+GET http://127.0.0.1:8001/tickets
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+### Listar Tickets Filtrados por Estado
+GET http://127.0.0.1:8001/tickets?estado=abierto
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+### Obtener Ticket por ID
+GET http://127.0.0.1:8001/tickets/1
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+### Crear Nuevo Ticket (Gestor)
+POST http://127.0.0.1:8001/tickets
+Content-Type: application/json
+Authorization: Bearer TOKEN_DEL_GESTOR
+
+{
+    "titulo": "Nuevo ticket de prueba",
+    "descripcion": "Esta es una descripción detallada del problema que estoy experimentando"
+}
+
+### Actualizar Estado del Ticket (Admin)
+PUT http://127.0.0.1:8001/tickets/1/estado
+Content-Type: application/json
+Authorization: Bearer TOKEN_DEL_ADMIN
+
+{
+    "estado": "en_progreso"
+}
+
+### Asignar Ticket a Admin
+PUT http://127.0.0.1:8001/tickets/1/asignar
+Content-Type: application/json
+Authorization: Bearer TOKEN_DEL_ADMIN
+
+{
+    "admin_id": 3
+}
+
+### Agregar Comentario al Ticket
+POST http://127.0.0.1:8001/tickets/1/comentarios
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
+
+{
+    "mensaje": "Este es un comentario de prueba sobre el ticket"
+}
+
+### Obtener Historial del Ticket
+GET http://127.0.0.1:8001/tickets/1/historial
+Content-Type: application/json
+Authorization: Bearer TU_TOKEN_AQUI
