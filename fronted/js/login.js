@@ -17,8 +17,7 @@ const API_CONFIG = {
 const token = sessionStorage.getItem('auth_token');
 if (token) {
     // Ya tiene sesión, redirigir al dashboard
-    // Redirigir al dashboard
-window.location.href = 'dboard.html';  // ← CAMBIO AQUÍ
+    window.location.href = 'dboard.html';
 }
 
 // ========================================
@@ -64,7 +63,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
             sessionStorage.setItem('user_data', JSON.stringify(data.user));
             
             // Redirigir al dashboard
-            window.location.href = 'dashboard.html';
+            window.location.href = 'dboard.html';  // ← CORREGIDO
             
         } else {
             // Mostrar error
