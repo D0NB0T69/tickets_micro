@@ -17,7 +17,8 @@ const API_CONFIG = {
 const token = sessionStorage.getItem('auth_token');
 if (token) {
     // Ya tiene sesión, redirigir al dashboard
-    window.location.href = 'dboard.html';
+    // Redirigir al dashboard
+window.location.href = 'dboard.html';  // ← CAMBIO AQUÍ
 }
 
 // ========================================

@@ -3,31 +3,27 @@ namespace App\models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ticket extends Model {
-    protected $table = "tickets";
+class Usuario extends Model {
+    protected $table = "users";
     
     public $timestamps = true;
     
     protected $fillable = [
-        'titulo',
-        'descripcion',
-        'estado',
-        'gestor_id',
-        'admin_id'
+        'name',
+        'email',
+        'password',
+        'role'
     ];
     
-    // Relación: ticket pertenece a un gestor
-    public function gestor() {
-        return $this->belongsTo('App\models\Usuario', 'gestor_id');
+    protected $hidden = ['password'];
+    
+    // Relación: usuario tiene múltiples tickets como gestor
+    public function ticketsComoGestor() {
+        return $this->hasMany(Ticket::class, 'gestor_id');
     }
     
-    // Relación: ticket pertenece a un admin
-    public function admin() {
-        return $this->belongsTo('App\models\Usuario', 'admin_id');
-    }
-    
-    // Relación: ticket tiene múltiples actividades
-    public function actividades() {
-        return $this->hasMany(TicketActividad::class, 'ticket_id');
+    // Relación: usuario tiene múltiples tickets como admin
+    public function ticketsComoAdmin() {
+        return $this->hasMany(Ticket::class, 'admin_id');
     }
 }

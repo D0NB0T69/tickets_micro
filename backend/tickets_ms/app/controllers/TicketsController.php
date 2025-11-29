@@ -8,13 +8,9 @@ use Exception;
 
 class TicketsController {
     
-    /**
-     * Obtener todos los tickets
-     */
     public function getTodos($filtros = []) {
         $query = Ticket::with(['gestor', 'admin']);
         
-        // Aplicar filtros
         if (isset($filtros['estado']) && !empty($filtros['estado'])) {
             $query->where('estado', $filtros['estado']);
         }
@@ -36,9 +32,6 @@ class TicketsController {
         return $tickets->toJson();
     }
     
-    /**
-     * Obtener un ticket por ID
-     */
     public function getPorId($id) {
         $ticket = Ticket::with(['gestor', 'admin'])->find($id);
         
@@ -49,9 +42,6 @@ class TicketsController {
         return $ticket->toJson();
     }
     
-    /**
-     * Crear nuevo ticket
-     */
     public function crear($datos, $gestorId) {
         $ticket = new Ticket();
         $ticket->titulo = $datos['titulo'];
@@ -60,20 +50,11 @@ class TicketsController {
         $ticket->gestor_id = $gestorId;
         $ticket->save();
         
-        // Registrar actividad
-        $this->registrarActividad(
-            $ticket->id,
-            $gestorId,
-            "Ticket creado",
-            'sistema'
-        );
+        $this->registrarActividad($ticket->id, $gestorId, "Ticket creado");
         
         return $ticket->toJson();
     }
     
-    /**
-     * Actualizar estado del ticket
-     */
     public function actualizarEstado($ticketId, $nuevoEstado, $usuarioId) {
         $ticket = Ticket::find($ticketId);
         
@@ -85,20 +66,15 @@ class TicketsController {
         $ticket->estado = $nuevoEstado;
         $ticket->save();
         
-        // Registrar actividad
         $this->registrarActividad(
             $ticketId,
             $usuarioId,
-            "Estado cambiado de '{$estadoAnterior}' a '{$nuevoEstado}'",
-            'cambio_estado'
+            "Estado cambiado de '{$estadoAnterior}' a '{$nuevoEstado}'"
         );
         
         return $ticket->toJson();
     }
     
-    /**
-     * Asignar ticket a un admin
-     */
     public function asignar($ticketId, $adminId, $usuarioId) {
         $ticket = Ticket::find($ticketId);
         
@@ -106,7 +82,6 @@ class TicketsController {
             throw new Exception("Ticket no encontrado", 404);
         }
         
-        // Verificar que el admin exista
         $admin = Usuario::find($adminId);
         if (empty($admin) || $admin->role !== 'admin') {
             throw new Exception("Admin no válido", 400);
@@ -115,20 +90,15 @@ class TicketsController {
         $ticket->admin_id = $adminId;
         $ticket->save();
         
-        // Registrar actividad
         $this->registrarActividad(
             $ticketId,
             $usuarioId,
-            "Ticket asignado a {$admin->name}",
-            'asignacion'
+            "Ticket asignado a {$admin->name}"
         );
         
         return $ticket->toJson();
     }
     
-    /**
-     * Agregar comentario
-     */
     public function agregarComentario($ticketId, $usuarioId, $mensaje) {
         $ticket = Ticket::find($ticketId);
         
@@ -136,12 +106,7 @@ class TicketsController {
             throw new Exception("Ticket no encontrado", 404);
         }
         
-        $this->registrarActividad(
-            $ticketId,
-            $usuarioId,
-            $mensaje,
-            'comentario'
-        );
+        $this->registrarActividad($ticketId, $usuarioId, $mensaje);
         
         return json_encode([
             'success' => true,
@@ -149,9 +114,6 @@ class TicketsController {
         ]);
     }
     
-    /**
-     * Obtener historial de actividades
-     */
     public function getHistorial($ticketId) {
         $actividades = TicketActividad::with('usuario')
             ->where('ticket_id', $ticketId)
@@ -165,15 +127,11 @@ class TicketsController {
         return $actividades->toJson();
     }
     
-    /**
-     * Registrar actividad interna
-     */
-    private function registrarActividad($ticketId, $usuarioId, $mensaje, $tipo) {
+    private function registrarActividad($ticketId, $usuarioId, $mensaje) {
         $actividad = new TicketActividad();
         $actividad->ticket_id = $ticketId;
-        $actividad->usuario_id = $usuarioId;
+        $actividad->user_id = $usuarioId;  // ← CAMBIADO
         $actividad->mensaje = $mensaje;
-        $actividad->tipo = $tipo;
         $actividad->save();
     }
 }
