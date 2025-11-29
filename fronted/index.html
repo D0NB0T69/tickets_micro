@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema de Tickets</title>
+    <link rel="stylesheet" href="css/tickets.css">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>🎫 Sistema de Tickets</h1>
+                <p>Gestión de Soporte</p>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="ejemplo@correo.com"
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="••••••••"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-block">
+                    Iniciar Sesión
+                </button>
+                
+                <div id="errorMessage" class="alert alert-error" style="display: none;"></div>
+            </form>
+            
+            <div class="login-footer">
+                <p><strong>👤 Usuarios de Prueba:</strong></p>
+                <div class="test-users">
+                    <div class="test-user">
+                        <span class="badge badge-gestor">Gestor</span>
+                        <small>gestor1@example.com</small>
+                        <small>password123</small>
+                    </div>
+                    <div class="test-user">
+                        <span class="badge badge-admin">Admin</span>
+                        <small>admin1@example.com</small>
+                        <small>password123</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/login.js"></script>
+</body>
+</html>

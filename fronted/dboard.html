@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Tickets</title>
+    <link rel="stylesheet" href="css/tickets.css">
+    <link rel="stylesheet" href="css/dboard.css">
+</head>
+<body>
+    <!-- Barra de navegación superior -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <h1> Sistema de Tickets</h1>
+            </div>
+            <div class="navbar-user">
+                <span id="userName" class="user-name"></span>
+                <span id="userRole" class="user-role"></span>
+                <button id="logoutBtn" class="btn btn-secondary btn-sm">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="dashboard-container">
+        <!-- Menú lateral -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="#" data-section="tickets" class="nav-item active">
+                     Mis Tickets
+                </a>
+                <a href="#" data-section="crear-ticket" class="nav-item" id="menuCrearTicket">
+                     Crear Ticket
+                </a>
+                <a href="#" data-section="usuarios" class="nav-item" id="menuUsuarios" style="display: none;">
+                     Gestionar Usuarios
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Contenido principal -->
+        <main class="main-content">
+            
+            <!-- SECCIÓN: Lista de Tickets -->
+            <section id="section-tickets" class="content-section active">
+                <div class="section-header">
+                    <h2>Mis Tickets</h2>
+                    
+                    <!-- Filtros (solo para admin) -->
+                    <div id="filtrosContainer" class="filters" style="display: none;">
+                        <select id="filtroEstado" class="form-select">
+                            <option value="">Todos los estados</option>
+                            <option value="abierto">Abierto</option>
+                            <option value="en_progreso">En Progreso</option>
+                            <option value="resuelto">Resuelto</option>
+                            <option value="cerrado">Cerrado</option>
+                        </select>
+                        <button id="btnFiltrar" class="btn btn-secondary btn-sm">
+                            Filtrar
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="ticketsList" class="tickets-grid">
+                    <div class="loading">Cargando tickets...</div>
+                </div>
+            </section>
+            
+            <!-- SECCIÓN: Crear Ticket -->
+            <section id="section-crear-ticket" class="content-section">
+                <div class="section-header">
+                    <h2>Crear Nuevo Ticket</h2>
+                </div>
+                
+                <div class="card">
+                    <form id="formCrearTicket">
+                        <div class="form-group">
+                            <label for="ticketTitulo">Título del Ticket *</label>
+                            <input 
+                                type="text" 
+                                id="ticketTitulo" 
+                                class="form-input"
+                                placeholder="Ej: Error en módulo de reportes"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ticketDescripcion">Descripción Detallada *</label>
+                            <textarea 
+                                id="ticketDescripcion" 
+                                class="form-textarea"
+                                rows="6"
+                                placeholder="Describe el problema con el mayor detalle posible..."
+                                required
+                            ></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            Crear Ticket
+                        </button>
+                    </form>
+                </div>
+            </section>
+            
+            <!-- SECCIÓN: Gestionar Usuarios (solo admin) -->
+            <section id="section-usuarios" class="content-section">
+                <div class="section-header">
+                    <h2>Gestionar Usuarios</h2>
+                </div>
+                
+                <div id="usuariosList" class="card">
+                    <div class="loading">Cargando usuarios...</div>
+                </div>
+            </section>
+            
+        </main>
+    </div>
+    
+    <!-- MODAL: Detalle del Ticket -->
+    <div id="modalTicket" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Detalle del Ticket</h3>
+                <button class="modal-close" data-modal="modalTicket">×</button>
+            </div>
+            <div class="modal-body" id="ticketDetalleContent">
+                <div class="loading">Cargando...</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MODAL: Editar Usuario -->
+    <div id="modalEditarUsuario" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-container modal-sm">
+            <div class="modal-header">
+                <h3>Editar Usuario</h3>
+                <button class="modal-close" data-modal="modalEditarUsuario">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditarUsuario">
+                    <input type="hidden" id="editUserId">
+                    
+                    <div class="form-group">
+                        <label for="editUserName">Nombre *</label>
+                        <input 
+                            type="text" 
+                            id="editUserName" 
+                            class="form-input"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editUserEmail">Email *</label>
+                        <input 
+                            type="email" 
+                            id="editUserEmail" 
+                            class="form-input"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editUserRole">Rol *</label>
+                        <select id="editUserRole" class="form-select" required>
+                            <option value="gestor">Gestor</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-modal="modalEditarUsuario">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/dboard.js"></script>
+</body>
+</html>
