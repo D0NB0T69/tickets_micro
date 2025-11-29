@@ -1,7 +1,42 @@
-### Prueba Microservicio 
-GET http://127.0.0.1:8000
 
-### Consultar Usuarios 
+### Prueba del Microservicio 
+GET http://127.0.0.1:8000
+Content-Type: application/json
+
+### Consultar Todos los Usuarios 
 GET http://127.0.0.1:8000/usuarios/all
 Content-Type: application/json
 
+### Login de Usuario (Gestor)
+POST http://127.0.0.1:8000/usuarios/login
+Content-Type: application/json
+
+{
+    "email": "gestor1@example.com",
+    "password": "password123"
+}
+
+### Login de Usuario (Admin)
+POST http://127.0.0.1:8000/usuarios/login
+Content-Type: application/json
+
+{
+    "email": "admin1@example.com",
+    "password": "password123"
+}
+
+### Validar Token
+POST http://127.0.0.1:8000/usuarios/validar-token
+Content-Type: application/json
+
+{
+    "token": "TU_TOKEN_AQUI"
+}
+
+### Logout
+POST http://127.0.0.1:8000/usuarios/logout
+Content-Type: application/json
+
+{
+    "token": "TU_TOKEN_AQUI"
+}

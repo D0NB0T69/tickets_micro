@@ -5,13 +5,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class AutoToken extends Model {
     protected $table = "auth_tokens";
-    public $timestamps = false;
+    
+    // Habilitar timestamps automáticos
+    public $timestamps = true;
     
     protected $fillable = [
-        'userId', 'token', 'expiresAt'
+        'user_id', 
+        'token'
     ];
 
-    public function user() {
-        return $this->belongsTo(Usuario::class, 'userId');
+    // Relación: un token pertenece a un usuario
+    public function usuario() {
+        return $this->belongsTo(Usuario::class, 'user_id');
     }
 }

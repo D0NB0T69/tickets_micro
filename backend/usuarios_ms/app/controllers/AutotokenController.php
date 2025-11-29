@@ -1,50 +1,57 @@
 <?php
 namespace App\controllers;
 
-use App\models\User;
 use App\models\AutoToken;
 use App\models\Usuario;
 use Exception;
 
-class AutoTokenController {
+class AutotokenController {
     
-    public function login($username, $password) {
-        $user = Usuario::where('userName', $username)->first();
+    /**
+     * Realiza el login del usuario y genera un token de sesión
+     */
+    public function login($email, $password) {
+        // Buscar usuario por email
+        $usuario = Usuario::where('email', $email)->first();
         
-        if (empty($user)) {
+        if (empty($usuario)) {
             throw new Exception("Usuario no encontrado", 404);
         }
         
-        // Verificar contraseña (en producción usar password_verify)
-        if ($user->password !== $password) {
+        // Verificar contraseña
+        // IMPORTANTE: En producción usar password_hash() y password_verify()
+        if ($usuario->password !== $password) {
             throw new Exception("Credenciales inválidas", 401);
         }
         
-        // Generar token aleatorio
+        // Generar token aleatorio de 64 caracteres
         $token = bin2hex(random_bytes(32));
         
-        // Eliminar tokens anteriores del usuario
-        AutoToken::where('userId', $user->id)->delete();
+        // Eliminar tokens anteriores del usuario (sesiones previas)
+        AutoToken::where('user_id', $usuario->id)->delete();
         
-        // Crear nuevo token
+        // Crear nuevo token en la base de datos
         $authToken = new AutoToken();
-        $authToken->userId = $user->id;
+        $authToken->user_id = $usuario->id;
         $authToken->token = $token;
-        $authToken->expiresAt = date('Y-m-d H:i:s', strtotime('+24 hours'));
         $authToken->save();
         
+        // Retornar respuesta con token y datos del usuario
         return json_encode([
+            'success' => true,
             'token' => $token,
             'user' => [
-                'id' => $user->id,
-                'userName' => $user->userName,
-                'fullName' => $user->fullName,
-                'email' => $user->email,
-                'role' => $user->role
+                'id' => $usuario->id,
+                'name' => $usuario->name,
+                'email' => $usuario->email,
+                'role' => $usuario->role
             ]
         ]);
     }
     
+    /**
+     * Cierra la sesión eliminando el token
+     */
     public function logout($token) {
         $deleted = AutoToken::where('token', $token)->delete();
         
@@ -52,13 +59,18 @@ class AutoTokenController {
             throw new Exception("Token no encontrado", 404);
         }
         
-        return json_encode(['message' => 'Sesión cerrada exitosamente']);
+        return json_encode([
+            'success' => true,
+            'message' => 'Sesión cerrada exitosamente'
+        ]);
     }
     
-    public function validateToken($token) {
+    /**
+     * Valida si un token es válido y retorna los datos del usuario
+     */
+    public function validarToken($token) {
         $authToken = AutoToken::where('token', $token)
-            ->where('expiresAt', '>', date('Y-m-d H:i:s'))
-            ->with('user')
+            ->with('usuario')
             ->first();
         
         if (empty($authToken)) {
@@ -68,11 +80,10 @@ class AutoTokenController {
         return json_encode([
             'valid' => true,
             'user' => [
-                'id' => $authToken->user->id,
-                'userName' => $authToken->user->userName,
-                'fullName' => $authToken->user->fullName,
-                'email' => $authToken->user->email,
-                'role' => $authToken->user->role
+                'id' => $authToken->usuario->id,
+                'name' => $authToken->usuario->name,
+                'email' => $authToken->usuario->email,
+                'role' => $authToken->usuario->role
             ]
         ]);
     }
