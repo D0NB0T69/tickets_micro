@@ -15,9 +15,11 @@ return function (App $app) {
     //esto se genera en base a la documentacion de Slim, creo que esto es para crud
     $app->group('/usuarios', function (RouteCollectorProxy $group) {
         $group->get('/all',  [UsuariosRepository::class, 'queryAllUsuarios']);
+        $group->post('/login', [UsuariosRepository::class, 'login']);
+
+        
     });
 
-    $app->post('/login', [UsuariosRepository::class, 'login']);
 }
 
 ?>

@@ -18,7 +18,6 @@ return function (App $app) {
         if ($request->getMethod() === 'OPTIONS') {
             return $response->withStatus(200);
         }
-
         return $response;
     });
 
